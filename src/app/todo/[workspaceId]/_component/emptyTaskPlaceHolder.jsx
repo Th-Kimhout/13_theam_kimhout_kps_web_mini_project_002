@@ -4,17 +4,17 @@ const EmptyTaskPlaceHolderComponent = () => {
   return (
     <div className="w-[500px] mx-auto flex mt-10 flex-col items-center border-1 text-center p-6 rounded-md gap-2">
       <p className="font-bold text-2xl">
-        Oops! I think you workspace doesn't have any task!
+        Oops! I think your workspace is empty!
       </p>
       <p className="text-description">
         Create your first task to show it here!
       </p>
-      <div className=" relative h-[300px] w-[200px]">
+      <div className=" relative h-[300px] w-[300px]">
         <Image
           fill
-          src={"/hello_shin_chang.jpg"}
+          src={"/chin_chang_sad.jpg"}
           className="object-cover"
-          alt="shin chang hello"
+          alt="shin chang sad"
         />
       </div>
     </div>

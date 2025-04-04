@@ -4,17 +4,16 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Circle, Ellipsis, Grid2x2Plus } from "lucide-react";
+import { Circle } from "lucide-react";
 import PopupFormComponent from "./popupForm";
 import Link from "next/link";
-import { DropdownMenuComponent } from "../[workspaceId]/_component/dropdownMenus";
 
 export const Workspace = ({ workspace }) => {
   return (
     <>
       <SidebarGroup
         className={
-          "flex-row justify-between items-center !text-description pr-3.5"
+          "flex-row justify-between items-center !text-description pr-3.5 "
         }
       >
         <SidebarGroupLabel className={"font-bold text-2xl !text-description"}>
@@ -23,26 +22,35 @@ export const Workspace = ({ workspace }) => {
         <PopupFormComponent />
       </SidebarGroup>
 
-      <SidebarGroup>
+      <SidebarGroup className={"h-[250px] overflow-auto"}>
         <SidebarMenu>
+          {/* Handle Empty Workspace */}
           {workspace?.map((data) => (
             <SidebarMenuItem
               key={data.workspaceId}
               className={
-                "flex justify-between items-center py-1 hover:bg-zinc-200 rounded-md px-2"
+                "flex justify-between relative items-center py-1 hover:bg-zinc-200 rounded-md px-2"
               }
             >
-              <div className="flex gap-4 items-center justify-center">
-                <Circle stroke={data.color} fill={data.color} size={12} />
-                {/* <SidebarMenuButton className={"flex justify-between"}> */}
-                <Link href={`/todo/${data.workspaceId}?q=workspace`}>
+              <Link
+                href={`/todo/${data.workspaceId}?q=workspace`}
+                className="w-full"
+              >
+                <div className="flex gap-4 items-center justify-start">
+                  <Circle stroke={data.color} fill={data.color} size={12} />
+                  {/* <SidebarMenuButton className={"flex justify-between"}> */}
+
                   <span>{data.workspaceName}</span>
-                </Link>
+                </div>
+              </Link>
+              <div className="absolute right-5">
+                {" "}
+                <PopupFormComponent
+                  workspaceId={data.workspaceId}
+                  workspaceName={data.workspaceName}
+                  action={"UPDATE"}
+                />
               </div>
-              <PopupFormComponent
-                workspaceId={data.workspaceId}
-                action={"UPDATE"}
-              />
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

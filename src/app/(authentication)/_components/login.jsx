@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function LoginComponent() {
   const router = useRouter();
@@ -27,11 +28,14 @@ export default function LoginComponent() {
       redirect: false,
       ...userData,
     });
+
     if (res?.ok) {
+      toast.success("Login Successfully!");
+
       router.push("/todo");
       reset();
     } else {
-      console.log("Login failed:", res?.error);
+      toast.error("Email or Password is incorrect!");
     }
   };
 
@@ -49,13 +53,12 @@ export default function LoginComponent() {
         <Input
           type="text"
           placeholder="Please type your email"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={`bg-ghost-white py-2.5 px-4 mb-2 rounded-lg w-full text-light-steel-blue/90`}
           {...register("email")}
         />
+        <span className="text-red-500 text-sm ">{errors?.email?.message}</span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.email?.message}
-      </span>
+
       {/* password */}
       <div>
         <Label
@@ -68,13 +71,14 @@ export default function LoginComponent() {
         <Input
           type="password"
           placeholder="Please type your password"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={`bg-ghost-white py-2.5 px-4 mb-2 rounded-lg w-full text-light-steel-blue/90`}
           {...register("password")}
         />
+        <span className="text-red-500 text-sm ">
+          {errors?.password?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.password?.message}
-      </span>
+
       {/* sign in button */}
       <Button
         type="submit"
@@ -99,7 +103,11 @@ export default function LoginComponent() {
 
       {/* sign in with google */}
       <div className=" bg-ghost-white rounded-lg text-center">
-        <Button className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-ghost-white/50">
+        {/* Handle login with validate form */}
+        <Button
+          onClick={() => signIn("google", { callbackUrl: "/todo" })}
+          className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-ghost-white/50"
+        >
           <img src="/Google Icon.svg" alt="google icon" /> Login with google
         </Button>
       </div>

@@ -13,9 +13,9 @@ import {
 import { useState } from "react";
 import TaskActionButtonComponent from "./taskActionButton";
 import DialogDeleteComponent from "./dialogDelete";
+import { Ellipsis } from "lucide-react";
 
-
-export function DropdownMenuComponent({taskId, workspaceId }) {
+export function DropdownMenuComponent({ taskId, workspaceId }) {
   const menuItems = [
     { label: "Update Task", action: "UPDATE" },
     { label: "Delete Task", action: "DELETE" },
@@ -35,7 +35,9 @@ export function DropdownMenuComponent({taskId, workspaceId }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline">Open</Button>
+          <Button variant="outline">
+            <Ellipsis />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
@@ -54,11 +56,11 @@ export function DropdownMenuComponent({taskId, workspaceId }) {
       </DropdownMenu>
 
       {/* Open Dialog or Popover based on action */}
-      {selectedAction?.action === "UPDATE" ||
-      selectedAction?.action === "ADD" ? (
+      {selectedAction?.action === "UPDATE" ? (
         <TaskActionButtonComponent
           action={selectedAction.action}
           workspaceId={workspaceId}
+          taskId={taskId}
         />
       ) : selectedAction?.action === "DELETE" ? (
         <DialogDeleteComponent

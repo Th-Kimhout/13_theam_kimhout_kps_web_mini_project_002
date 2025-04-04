@@ -1,5 +1,17 @@
 import { baseUrl } from "./constant";
 
+// General function to handle API responses
+const handleResponse = async (res) => {
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null); // Try parsing error response
+    const errorMessage =
+      errorData?.message || `Error ${res.status}: ${res.statusText}`;
+    throw new Error(errorMessage);
+  }
+  return await res.json();
+};
+
+// Register a new user
 export const registerUserService = async (userData) => {
   try {
     const res = await fetch(`${baseUrl}/auth/register`, {
@@ -10,13 +22,13 @@ export const registerUserService = async (userData) => {
         "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log("Error : ", e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
+// Login user
 export const loginService = async (loginData) => {
   try {
     const res = await fetch(`${baseUrl}/auth/login`, {
@@ -27,9 +39,8 @@ export const loginService = async (loginData) => {
         "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log("Error : ", e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };

@@ -1,6 +1,14 @@
 import headerToken from "@/app/api/headerToken";
 import { baseUrl } from "./constant";
 
+const handleResponse = async (res) => {
+  if (!res.ok) {
+    const errorMessage = await res.text();
+    throw new Error(`Error ${res.status}: ${errorMessage}`);
+  }
+  return res.json();
+};
+
 export const getAllUserInfoService = async () => {
   const headers = await headerToken();
   try {
@@ -8,10 +16,8 @@ export const getAllUserInfoService = async () => {
       method: "GET",
       headers: headers,
     });
-    const data = await res.json();
-
-    return data;
-  } catch (e) {
-    console.log("Error: ", e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };

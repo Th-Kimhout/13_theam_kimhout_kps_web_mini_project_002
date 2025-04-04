@@ -5,12 +5,13 @@ import { Label } from "@radix-ui/react-label";
 import { ListPlus } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { DatePickerWithPresets } from "./datetimePicker";
-import { createTaskAction } from "@/action/taskAction";
+import { createTaskAction, updateTaskByIdAction } from "@/action/taskAction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskSchema } from "@/lib/zon/taskSchema";
 import SelectTagComponent from "./selectTag";
+import toast from "react-hot-toast";
 
-const TaskFormComponent = ({ action, workspaceId }) => {
+const TaskFormComponent = ({ action, workspaceId, taskId }) => {
   const {
     register,
     reset,
@@ -26,7 +27,18 @@ const TaskFormComponent = ({ action, workspaceId }) => {
       ...data,
       endDate: new Date(data.endDate).toISOString(),
     };
-    const res = await createTaskAction(taskData, workspaceId);
+    action === "UPDATE"
+      ? toast.promise(updateTaskByIdAction(taskId, workspaceId, taskData), {
+          success: "Your task has been updated successfully!",
+          loading: "Updating your task....",
+          error: "Unable to update your task!",
+        })
+      : toast.promise(createTaskAction(taskData, workspaceId), {
+          success: "Your task has been created successfully!",
+          loading: "Creating your task....",
+          error: "Unable to create your task!",
+        });
+    reset();
     //toast
   };
 
@@ -70,6 +82,7 @@ const TaskFormComponent = ({ action, workspaceId }) => {
       <span className="text-red-500 text-sm mt-2">
         {errors?.taskDetails?.message}
       </span>
+      {/* handle Clean task tag */}
       {/* task's tag */}
       <div>
         <Controller
@@ -81,7 +94,7 @@ const TaskFormComponent = ({ action, workspaceId }) => {
         />
       </div>
       <span className="text-red-500 text-sm mt-2">{errors?.tag?.message}</span>
-      {/* task's title */}
+      {/* task's date */}
       <div>
         <Label
           htmlFor="endDate"
@@ -89,7 +102,7 @@ const TaskFormComponent = ({ action, workspaceId }) => {
         >
           <ListPlus size={20} /> Task's end date
         </Label>
-
+        {/* handle date */}
         <Controller
           name="endDate"
           control={control}
@@ -106,9 +119,13 @@ const TaskFormComponent = ({ action, workspaceId }) => {
       </span>
       <Button
         type="submit"
-        className="text-base cursor-pointer bg-persian-green text-white py-2.5 rounded-lg w-full font-bold"
+        className={`text-base cursor-pointer text-white py-2.5 rounded-lg w-full   ${
+          action === "UPDATE"
+            ? "hover:bg-persian-green bg-transparent text-persian-green  border-1 border-persian-green"
+            : "hover:bg-royal-blue bg-transparent text-royal-blue  border-1 border-royal-blue"
+        }`}
       >
-        {action === "UPDATE" ? "UPDATE TASK" : "ADD TASK"}
+        {action === "UPDATE" ? "Update" : "Create"}
       </Button>
     </form>
   );

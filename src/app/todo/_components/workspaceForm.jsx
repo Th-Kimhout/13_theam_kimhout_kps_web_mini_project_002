@@ -5,52 +5,77 @@ import {
 } from "@/action/workspaceAction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { workspaceSchema } from "@/lib/zon/workspaceSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { ListPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-const WorkspaceFormComponent = ({ workspaceId, action }) => {
+const WorkspaceFormComponent = ({ workspaceId, workspaceName, action }) => {
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: zodResolver(workspaceSchema) });
 
-  const onSubmit = async (data) => {
-    const res =
-      action === "UPDATE"
-        ? await updateWorkspaceNameByIdAction(workspaceId, data)
-        : await createWorkspaceAction(data);
+  const onSubmit = (data) => {
+    action === "UPDATE"
+      ? toast.promise(
+          updateWorkspaceNameByIdAction(workspaceId, data),
+
+          {
+            loading: "Updating Your Workspace...",
+            success: "Your Workspace has been updated Successfully!",
+            error: "There is an error updating your workspace...",
+          }
+        )
+      : toast.promise(
+          createWorkspaceAction(data),
+
+          {
+            loading: "Creating Your Workspace...",
+            success: "Create Your Workspace Successfully!",
+            error: "There is an error creating your workspace...",
+          }
+        );
+    reset();
   };
 
   return (
-    <form className="space-y-6 bg-white" onSubmit={handleSubmit(onSubmit)}>
+    <form className=" flex flex-col bg-white" onSubmit={handleSubmit(onSubmit)}>
       {/* workspace's name */}
-      <div>
+      <div className="mb-4">
         <Label
           htmlFor="email"
           className="text-light-steel-blue flex gap-2 py-2 items-center mb-2 text-base"
         >
           <ListPlus size={20} /> Workspace's Name
         </Label>
-
+        {/* Handle update input cannot change  */}
         <Input
+          value={action !== "ADD" ? workspaceName : ""}
           type="text"
           placeholder="Enter your workspace's name"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={`bg-ghost-white py-2.5 px-4 rounded-lg mb-2 w-full text-light-steel-blue/90`}
           {...register("workspaceName")}
         />
+        <span className="text-red-500 text-sm ">
+          {errors?.workspaceName?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.email?.message}
-      </span>
+
       {/* sign in button */}
       <Button
         type="submit"
-        className="text-base cursor-pointer bg-persian-green text-white py-2.5 rounded-lg w-full font-bold"
+        className={`text-base cursor-pointer hover:text-white py-2.5 rounded-lg self-end font-bold ${
+          action === "UPDATE"
+            ? "hover:bg-persian-green bg-transparent text-persian-green  border-1 border-persian-green"
+            : "hover:bg-royal-blue bg-transparent text-royal-blue  border-1 border-royal-blue"
+        }`}
       >
-        {action === "ADD" ? "ADD WORKSPACE" : "UPDATE WORKSPACE"}
+        {action === "UPDATE" ? "Update" : "Create"}
       </Button>
     </form>
   );

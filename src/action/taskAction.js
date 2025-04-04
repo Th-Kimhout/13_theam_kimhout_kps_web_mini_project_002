@@ -4,6 +4,7 @@ import {
   createTaskFromWorkspaceIdService,
   deleteTaskByIdFromWorkspaceIdService,
   getAllTasksFromWorkspaceIdService,
+  updateTaskByIdFromWorkspaceIdService,
   updateTaskStatusByIdFromWorkspaceIdService,
 } from "@/service/task.service";
 import { revalidateTag } from "next/cache";
@@ -41,6 +42,13 @@ export const updateTaskStatusAction = async (
 export const deleteTaskByIdAction = async (taskId, workspaceId) => {
   const res = await deleteTaskByIdFromWorkspaceIdService(taskId, workspaceId);
   console.log("deete pat", res);
+  revalidateTag("getAllTasks");
+
+  return res;
+};
+
+export const updateTaskByIdAction= async(taskId, workspaceId,taskInfo) => {
+  const res = await updateTaskByIdFromWorkspaceIdService(taskId, workspaceId,taskInfo);
   revalidateTag("getAllTasks");
 
   return res;

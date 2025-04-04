@@ -11,11 +11,15 @@ import { Clock } from "lucide-react";
 import React from "react";
 
 import { format, isTomorrow } from "date-fns";
-import TaskActionButtonComponent from "@/app/todo/[workspaceId]/_component/taskActionButton";
 import { DropdownMenuComponent } from "@/app/todo/[workspaceId]/_component/dropdownMenus";
+import toast from "react-hot-toast";
 export default function CardComponent({ tasks, workspaceId }) {
   const updateTaskStatus = async (taskId, taskStatus) => {
-    const res = await updateTaskStatusAction(taskId, workspaceId, taskStatus);
+    toast.promise(updateTaskStatusAction(taskId, workspaceId, taskStatus), {
+      success: "Your task's status has been updated successfully!",
+      loading: "Updating your task's status....",
+      error: "Unable to update your task' status!",
+    });
   };
 
   function formatDate(date) {
@@ -55,7 +59,7 @@ export default function CardComponent({ tasks, workspaceId }) {
     <>
       {tasks?.map((data) => (
         <div
-          className="border border-gray-300 rounded-xl mt-8"
+          className="border border-gray-300 rounded-xl mt-6"
           key={data.taskId}
         >
           <div className="p-5">

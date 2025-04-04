@@ -8,10 +8,10 @@ import {
 import { Ellipsis, Grid2x2Plus } from "lucide-react";
 import WorkspaceFormComponent from "./workspaceForm";
 
-const PopupFormComponent = ({ workspaceId, action }) => {
+const PopupFormComponent = ({ workspaceId, workspaceName, action }) => {
   return (
     <Dialog>
-      <DialogTrigger className="hover:bg-gray-500/30 p-2 rounded-sm">
+      <DialogTrigger className="cursor-pointer p-1.5 rounded-sm">
         {action === "UPDATE" ? (
           <Ellipsis className={"size-5"} />
         ) : (
@@ -23,7 +23,11 @@ const PopupFormComponent = ({ workspaceId, action }) => {
           <DialogTitle className={"text-center"}>
             {action === "UPDATE" ? "Update Workspace" : "Add Workspace"}
           </DialogTitle>
-          <WorkspaceFormComponent workspaceId={workspaceId} action={action} />
+          <WorkspaceFormComponent
+            workspaceId={workspaceId}
+            workspaceName={workspaceName}
+            action={action}
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>

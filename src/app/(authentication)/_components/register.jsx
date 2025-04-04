@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function RegisterComponent() {
   const router = useRouter();
@@ -21,14 +22,25 @@ export default function RegisterComponent() {
   } = useForm({ resolver: zodResolver(registerSchema) });
 
   const handleRegisterUser = (userData) => {
-    registerUserAction(userData).then((res) => {
-      if (res.status === "CREATED") {
-        router.push("/login");
-      } else {
-        //Toastify here
-        console.log("error: ", res.message);
+    toast.promise(
+      async () => {
+        try {
+          const res = await registerUserAction(userData);
+          if (res?.status === "CONFLICT") {
+            throw new Error(res.message);
+          }
+          router.push("/login");
+          return res.message || "User registered successfully!";
+        } catch (err) {
+          throw err.message || "An unexpected error occurred";
+        }
+      },
+      {
+        loading: "Registering User...",
+        success: (res) => `${res}`,
+        error: (err) => `${err}`,
       }
-    });
+    );
 
     reset();
   };
@@ -47,13 +59,14 @@ export default function RegisterComponent() {
         <Input
           type="text"
           placeholder="Please type your username"
-          className={` bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={` bg-ghost-white py-2.5 px-4 mb-2 rounded-lg w-full text-light-steel-blue/90`}
           {...register("username")}
         />
+        <span className="text-red-500 text-sm ">
+          {errors?.username?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.username?.message}
-      </span>
+
       {/* email */}
       <div>
         <Label
@@ -66,13 +79,12 @@ export default function RegisterComponent() {
         <Input
           type="text"
           placeholder="Please type your email"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={`bg-ghost-white py-2.5 px-4 mb-2 rounded-lg w-full text-light-steel-blue/90`}
           {...register("email")}
         />
+        <span className="text-red-500 text-sm ">{errors?.email?.message}</span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.email?.message}
-      </span>
+
       {/* password */}
       <div>
         <Label
@@ -85,13 +97,14 @@ export default function RegisterComponent() {
         <Input
           type="password"
           placeholder="Please type your password"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          className={`bg-ghost-white py-2.5 px-4 mb-2 rounded-lg w-full text-light-steel-blue/90`}
           {...register("password")}
         />
+        <span className="text-red-500 text-sm ">
+          {errors?.password?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.password?.message}
-      </span>
+
       {/* sign in button */}
       <Button
         type="submit"

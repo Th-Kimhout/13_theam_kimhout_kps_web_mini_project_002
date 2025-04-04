@@ -18,7 +18,7 @@ const CardContainer = async ({ workspaceId }) => {
 
   if (payload.length > 0) {
     return (
-      <section className="grid grid-cols-3 gap-12">
+      <section className="grid grid-cols-3 gap-12 h-[580px] overflow-auto">
         {/* Not started */}
         <div>
           <p className="font-medium text-lg border-b pb-2 border-b-status-not-started text-status-not-started">
@@ -27,7 +27,7 @@ const CardContainer = async ({ workspaceId }) => {
           {notStarted.length > 0 ? (
             <CardComponent tasks={notStarted} workspaceId={workspaceId} />
           ) : (
-            <p className="text-gray-500">No tasks</p>
+            <p className="text-gray-500 mt-4">No tasks</p>
           )}
         </div>
 
@@ -39,7 +39,7 @@ const CardContainer = async ({ workspaceId }) => {
           {inProgress.length > 0 ? (
             <CardComponent tasks={inProgress} workspaceId={workspaceId} />
           ) : (
-            <p className="text-gray-500">No tasks</p>
+            <p className="text-gray-500 mt-4">No tasks</p>
           )}
         </div>
 
@@ -51,7 +51,7 @@ const CardContainer = async ({ workspaceId }) => {
           {finished.length > 0 ? (
             <CardComponent tasks={finished} workspaceId={workspaceId} />
           ) : (
-            <p className="text-gray-500">No tasks</p>
+            <p className="text-gray-500 mt-4">No tasks</p>
           )}
         </div>
       </section>

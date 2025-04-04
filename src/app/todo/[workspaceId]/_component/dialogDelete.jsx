@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { deleteTaskByIdAction } from "@/action/taskAction";
+import toast from "react-hot-toast";
 
 const DialogDeleteComponent = ({ action, taskId, workspaceId }) => {
   const [isOpen, setIsOpen] = useState(!!action);
@@ -20,8 +21,11 @@ const DialogDeleteComponent = ({ action, taskId, workspaceId }) => {
   }, [action]);
 
   const handleDelete = async () => {
-    const res = await deleteTaskByIdAction(taskId.trim(), workspaceId.trim());
-    console.log("res", res);
+    toast.promise(deleteTaskByIdAction(taskId.trim(), workspaceId.trim()), {
+      success: "Your task has been delete successfully!",
+      loading: "Deleting your task....",
+      error: "Unable to delete your task!",
+    });
   };
 
   return (

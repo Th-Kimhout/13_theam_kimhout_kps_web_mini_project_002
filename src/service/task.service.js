@@ -1,6 +1,16 @@
 import headerToken from "@/app/api/headerToken";
 import { baseUrl } from "./constant";
 
+// General function to handle API responses
+const handleResponse = async (res) => {
+  if (!res.ok) {
+    const errorMessage = await res.text();
+    throw new Error(`Error ${res.status}: ${errorMessage}`);
+  }
+  return await res.json();
+};
+
+// Fetch a task by taskId and workspaceId
 export const getTaskByIdFromWorkspaceIdService = async (
   taskId,
   workspaceId
@@ -9,13 +19,13 @@ export const getTaskByIdFromWorkspaceIdService = async (
     const res = await fetch(
       `${baseUrl}/task/${taskId}/workspace/${workspaceId}`
     );
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
+// Update a task by taskId and workspaceId
 export const updateTaskByIdFromWorkspaceIdService = async (
   taskId,
   workspaceId,
@@ -31,13 +41,13 @@ export const updateTaskByIdFromWorkspaceIdService = async (
         headers: headers,
       }
     );
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
+// Delete a task by taskId and workspaceId
 export const deleteTaskByIdFromWorkspaceIdService = async (
   taskId,
   workspaceId
@@ -51,15 +61,13 @@ export const deleteTaskByIdFromWorkspaceIdService = async (
         headers: headers,
       }
     );
-    const data = await res.json();
-    console.log("in fetvh", data);
-
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
+// Create a new task in a workspace
 export const createTaskFromWorkspaceIdService = async (
   taskInfo,
   workspaceId
@@ -71,13 +79,13 @@ export const createTaskFromWorkspaceIdService = async (
       body: JSON.stringify(taskInfo),
       headers: headers,
     });
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
+// Update task status by taskId and workspaceId
 export const updateTaskStatusByIdFromWorkspaceIdService = async (
   taskId,
   workspaceId,
@@ -92,21 +100,14 @@ export const updateTaskStatusByIdFromWorkspaceIdService = async (
         headers: headers,
       }
     );
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };
 
-export const getAllTasksFromWorkspaceIdService = async (
-  // taskId,
-  workspaceId
-  // pageNo,
-  // pageSize,
-  // sortByField,
-  // sortDirection
-) => {
+// Fetch all tasks in a workspace
+export const getAllTasksFromWorkspaceIdService = async (workspaceId) => {
   try {
     const headers = await headerToken();
     const res = await fetch(
@@ -117,9 +118,8 @@ export const getAllTasksFromWorkspaceIdService = async (
         next: { tags: ["getAllTasks"] },
       }
     );
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log(e);
+    return await handleResponse(res);
+  } catch (error) {
+    return { error: error.message };
   }
 };

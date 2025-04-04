@@ -1,13 +1,17 @@
-import { getAllUserInfoService } from "@/service/user.service";
+import { getAllUserInformationAction } from "@/action/userAction";
+
 import Image from "next/image";
 
 const TodoPage = async () => {
-  const data = await getAllUserInfoService();
-  const { payload } = data;
+  const userData = await getAllUserInformationAction(); 
   return (
     <div className="w-[500px] mx-auto flex mt-32 flex-col items-center border-1 text-center p-6 rounded-md">
       <p className="font-bold text-2xl">
-        Welcome <span className="text-green-500">{payload.username}</span>!
+        Welcome{" "}
+        <span className="text-green-500">
+          {userData.username || userData.name}
+        </span>
+        !
       </p>
       <p className="text-description">
         Please choose or create a workspace to show data here!
