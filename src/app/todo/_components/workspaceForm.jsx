@@ -12,7 +12,12 @@ import { ListPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const WorkspaceFormComponent = ({ workspaceId, workspaceName, action }) => {
+const WorkspaceFormComponent = ({
+  workspaceId,
+  workspaceName,
+  action,
+  onClose,
+}) => {
   const {
     register,
     reset,
@@ -41,6 +46,7 @@ const WorkspaceFormComponent = ({ workspaceId, workspaceName, action }) => {
           }
         );
     reset();
+    onClose();
   };
 
   return (
@@ -53,11 +59,12 @@ const WorkspaceFormComponent = ({ workspaceId, workspaceName, action }) => {
         >
           <ListPlus size={20} /> Workspace's Name
         </Label>
-        {/* Handle update input cannot change  */}
+
         <Input
-          value={action !== "ADD" ? workspaceName : ""}
           type="text"
-          placeholder="Enter your workspace's name"
+          placeholder={
+            action === "ADD" ? "Enter your workspace's name" : workspaceName
+          }
           className={`bg-ghost-white py-2.5 px-4 rounded-lg mb-2 w-full text-light-steel-blue/90`}
           {...register("workspaceName")}
         />

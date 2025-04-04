@@ -37,11 +37,7 @@ export const authOption = {
     async signIn({ account, profile }) {
       if (!profile?.email) {
         throw new Error("No profile");
-      } else {
-        console.log(profile);
-        console.log(account);
-        setTimeout(() => {}, 5000);
-      }
+      } 
     },
   },
 
@@ -61,7 +57,6 @@ export const authOption = {
     },
   },
 };
-
 const handler = NextAuth(authOption);
 
 export { handler as GET, handler as POST };

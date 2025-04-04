@@ -6,7 +6,6 @@ import Image from "next/image";
 
 const UserBadgeComponent = async () => {
   const userData = await getAllUserInformationAction();
-  console.log("data", userData);
 
   return (
     <section className="flex gap-8 justify-center items-center">
@@ -16,6 +15,7 @@ const UserBadgeComponent = async () => {
         <div className="relative w-12 h-12 rounded-full overflow-hidden">
           <Image
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             src={userData.profile || userData.image || "/chin_chang_happy.jpg"}
             alt="user profile"
           />

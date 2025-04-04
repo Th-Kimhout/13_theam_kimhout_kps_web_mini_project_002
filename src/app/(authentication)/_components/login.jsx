@@ -103,10 +103,11 @@ export default function LoginComponent() {
 
       {/* sign in with google */}
       <div className=" bg-ghost-white rounded-lg text-center">
-        {/* Handle login with validate form */}
+
         <Button
+          type="button"
           onClick={() => signIn("google", { callbackUrl: "/todo" })}
-          className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-ghost-white/50"
+          className="flex gap-2 items-start justify-center w-full bg-ghost-white text-charcoal shadow-none hover:bg-gray-500 hover:text-white cursor-pointer"
         >
           <img src="/Google Icon.svg" alt="google icon" /> Login with google
         </Button>

@@ -41,7 +41,7 @@ export const updateTaskStatusAction = async (
 
 export const deleteTaskByIdAction = async (taskId, workspaceId) => {
   const res = await deleteTaskByIdFromWorkspaceIdService(taskId, workspaceId);
-  console.log("deete pat", res);
+  
   revalidateTag("getAllTasks");
 
   return res;

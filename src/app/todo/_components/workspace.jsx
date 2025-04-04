@@ -19,12 +19,11 @@ export const Workspace = ({ workspace }) => {
         <SidebarGroupLabel className={"font-bold text-2xl !text-description"}>
           Workspace
         </SidebarGroupLabel>
-        <PopupFormComponent />
+        <PopupFormComponent action={"ADD"} />
       </SidebarGroup>
 
       <SidebarGroup className={"h-[250px] overflow-auto"}>
         <SidebarMenu>
-          {/* Handle Empty Workspace */}
           {workspace?.map((data) => (
             <SidebarMenuItem
               key={data.workspaceId}

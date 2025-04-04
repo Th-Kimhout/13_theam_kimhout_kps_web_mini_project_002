@@ -15,7 +15,7 @@ import TaskActionButtonComponent from "./taskActionButton";
 import DialogDeleteComponent from "./dialogDelete";
 import { Ellipsis } from "lucide-react";
 
-export function DropdownMenuComponent({ taskId, workspaceId }) {
+export function DropdownMenuComponent({ task, workspaceId }) {
   const menuItems = [
     { label: "Update Task", action: "UPDATE" },
     { label: "Delete Task", action: "DELETE" },
@@ -60,12 +60,12 @@ export function DropdownMenuComponent({ taskId, workspaceId }) {
         <TaskActionButtonComponent
           action={selectedAction.action}
           workspaceId={workspaceId}
-          taskId={taskId}
+          task={task}
         />
       ) : selectedAction?.action === "DELETE" ? (
         <DialogDeleteComponent
           action={selectedAction.action}
-          taskId={taskId}
+          task={task}
           workspaceId={workspaceId}
         />
       ) : null}

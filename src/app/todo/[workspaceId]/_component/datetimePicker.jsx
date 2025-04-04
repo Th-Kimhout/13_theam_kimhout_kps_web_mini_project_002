@@ -20,26 +20,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function DatePickerWithPresets({ selected, onSelect }) {
+export function DatePickerWithPresets({ action, task, setValue, trigger }) {
+  const [date, setDate] = React.useState();
+
+  React.useEffect(() => {
+    if (action === "UPDATE" && task) {
+      const parsedDate = new Date(task.endDate);
+      setDate(parsedDate);
+      setValue("endDate", parsedDate);
+    }
+  }, [action, task, setValue]);
+
+  const setData = (value) => {
+    setDate(value);
+    setValue("endDate", value);
+    trigger("endDate");
+  };
   return (
-    <Popover>
+    <Popover className="mb-2">
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           className={cn(
             "w-full justify-start text-left font-normal",
-            !selected && "text-muted-foreground"
+            !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {selected ? format(selected, "PPP") : <span>Pick a date</span>}
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select
-          onValueChange={(value) =>
-            onSelect(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            setDate(addDays(new Date(), parseInt(value)));
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />
@@ -52,7 +67,7 @@ export function DatePickerWithPresets({ selected, onSelect }) {
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={selected} onSelect={onSelect} />
+          <Calendar mode="single" selected={date} onSelect={setData} />
         </div>
       </PopoverContent>
     </Popover>

@@ -35,7 +35,6 @@ export default function CardComponent({ tasks, workspaceId }) {
       const weeks = Math.round(
         parsedDate.getDate() - currentDate.getDate() / 7
       );
-      console.log("week", weeks);
 
       return weeks + " week(s) Left";
     }
@@ -65,10 +64,7 @@ export default function CardComponent({ tasks, workspaceId }) {
           <div className="p-5">
             <div className="flex justify-between">
               <h2 className="text-xl font-bold capitalize">{data.taskTitle}</h2>
-              <DropdownMenuComponent
-                taskId={data.taskId}
-                workspaceId={workspaceId}
-              />
+              <DropdownMenuComponent task={data} workspaceId={workspaceId} />
             </div>
 
             {/* task detials */}

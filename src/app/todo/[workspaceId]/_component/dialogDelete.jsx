@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { deleteTaskByIdAction } from "@/action/taskAction";
 import toast from "react-hot-toast";
 
-const DialogDeleteComponent = ({ action, taskId, workspaceId }) => {
+const DialogDeleteComponent = ({ action, task, workspaceId }) => {
   const [isOpen, setIsOpen] = useState(!!action);
 
   // Sync isOpen with action changes
@@ -21,7 +21,7 @@ const DialogDeleteComponent = ({ action, taskId, workspaceId }) => {
   }, [action]);
 
   const handleDelete = async () => {
-    toast.promise(deleteTaskByIdAction(taskId.trim(), workspaceId.trim()), {
+    toast.promise(deleteTaskByIdAction(task.taskId.trim(), workspaceId.trim()), {
       success: "Your task has been delete successfully!",
       loading: "Deleting your task....",
       error: "Unable to delete your task!",

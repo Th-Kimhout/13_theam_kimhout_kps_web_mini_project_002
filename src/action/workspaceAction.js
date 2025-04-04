@@ -18,7 +18,9 @@ export const getAllWorkspacesAction = async () => {
 export const createWorkspaceAction = async (data) => {
   const res = await createNewWorkspaceService(data);
   revalidateTag("newWorkspace");
-  return ({ message, payload } = res);
+
+
+  return res;
 };
 
 export const getWorkspaceByIdAction = async (workspaceId) => {

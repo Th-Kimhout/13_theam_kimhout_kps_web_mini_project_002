@@ -2,8 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { ListPlus } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { DatePickerWithPresets } from "./datetimePicker";
 import { createTaskAction, updateTaskByIdAction } from "@/action/taskAction";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,11 +10,12 @@ import { taskSchema } from "@/lib/zon/taskSchema";
 import SelectTagComponent from "./selectTag";
 import toast from "react-hot-toast";
 
-const TaskFormComponent = ({ action, workspaceId, taskId }) => {
+const TaskFormComponent = ({ action, workspaceId, task, onClose }) => {
   const {
     register,
     reset,
-    control,
+    trigger,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -28,98 +28,107 @@ const TaskFormComponent = ({ action, workspaceId, taskId }) => {
       endDate: new Date(data.endDate).toISOString(),
     };
     action === "UPDATE"
-      ? toast.promise(updateTaskByIdAction(taskId, workspaceId, taskData), {
-          success: "Your task has been updated successfully!",
-          loading: "Updating your task....",
-          error: "Unable to update your task!",
-        })
+      ? toast.promise(
+          updateTaskByIdAction(task.taskId, workspaceId, taskData),
+          {
+            success: "Your task has been updated successfully!",
+            loading: "Updating your task....",
+            error: "Unable to update your task!",
+          }
+        )
       : toast.promise(createTaskAction(taskData, workspaceId), {
           success: "Your task has been created successfully!",
           loading: "Creating your task....",
           error: "Unable to create your task!",
         });
+    onClose();
     reset();
-    //toast
   };
 
   return (
-    <form className="space-y-6 bg-white" onSubmit={handleSubmit(onSubmit)}>
+    <form className=" flex flex-col bg-white" onSubmit={handleSubmit(onSubmit)}>
       {/* task's title */}
       <div>
         <Label
           htmlFor="taskTitle"
           className="text-light-steel-blue flex gap-2 py-2 items-center mb-2 text-base"
         >
-          <ListPlus size={20} /> Task's title
+          Task's title
         </Label>
 
         <Input
           type="text"
-          placeholder="Enter your task's title"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          placeholder={
+            action !== "UPDATE" ? "Enter your task's title" : task.taskTitle
+          }
+          className={`bg-ghost-white py-2.5 px-4 rounded-lg mb-2 w-full text-light-steel-blue/90`}
           {...register("taskTitle")}
         />
+        <span className="text-red-500 text-sm ">
+          {errors?.taskTitle?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.taskTitle?.message}
-      </span>
-      {/* task's title */}
+
+      {/* task's detials */}
       <div>
         <Label
           htmlFor="taskDetails"
           className="text-light-steel-blue flex gap-2 py-2 items-center mb-2 text-base"
         >
-          <ListPlus size={20} /> Task's Detail
+          Task's Detail
         </Label>
 
         <Input
           type="text"
-          placeholder="Enter your task's details"
-          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full text-light-steel-blue/90`}
+          placeholder={
+            action !== "UPDATE" ? "Enter your task's details" : task.taskDetails
+          }
+          className={`bg-ghost-white py-2.5 px-4 rounded-lg w-full mb-2 text-light-steel-blue/90`}
           {...register("taskDetails")}
         />
+        <span className="text-red-500 text-sm">
+          {errors?.taskDetails?.message}
+        </span>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.taskDetails?.message}
-      </span>
-      {/* handle Clean task tag */}
+
       {/* task's tag */}
-      <div>
-        <Controller
-          name="tag"
-          control={control}
-          render={({ field }) => (
-            <SelectTagComponent onSelect={field.onChange} />
-          )}
+      <div className="mb-2">
+        <Label
+          htmlFor="taskTags"
+          className="text-light-steel-blue flex gap-2 py-2 items-center mb-2 text-base"
+        >
+          Tag
+        </Label>
+        <SelectTagComponent
+          action={action}
+          task={task}
+          setValue={setValue}
+          trigger={trigger}
         />
+        <p className="text-red-500 text-sm mt-3">{errors?.tag?.message}</p>
       </div>
-      <span className="text-red-500 text-sm mt-2">{errors?.tag?.message}</span>
+
       {/* task's date */}
-      <div>
+      <div className="mb-2">
         <Label
           htmlFor="endDate"
           className="text-light-steel-blue flex gap-2 py-2 items-center mb-2 text-base"
         >
-          <ListPlus size={20} /> Task's end date
+          Task's end date
         </Label>
-        {/* handle date */}
-        <Controller
-          name="endDate"
-          control={control}
-          render={({ field }) => (
-            <DatePickerWithPresets
-              selected={field.value}
-              onSelect={field.onChange}
-            />
-          )}
+
+        <DatePickerWithPresets
+          action={action}
+          task={task}
+          setValue={setValue}
+          trigger={trigger}
         />
+        <p className="text-red-500 text-sm mt-3">{errors?.endDate?.message}</p>
       </div>
-      <span className="text-red-500 text-sm mt-2">
-        {errors?.endDate?.message}
-      </span>
+
       <Button
         type="submit"
-        className={`text-base cursor-pointer text-white py-2.5 rounded-lg w-full   ${
+        className={`text-base cursor-pointer hover:text-white py-2.5 rounded-lg self-end  mt-2 ${
           action === "UPDATE"
             ? "hover:bg-persian-green bg-transparent text-persian-green  border-1 border-persian-green"
             : "hover:bg-royal-blue bg-transparent text-royal-blue  border-1 border-royal-blue"

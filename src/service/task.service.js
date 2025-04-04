@@ -111,7 +111,7 @@ export const getAllTasksFromWorkspaceIdService = async (workspaceId) => {
   try {
     const headers = await headerToken();
     const res = await fetch(
-      `${baseUrl}/tasks/workspace/${workspaceId}?pageNo=0&pageSize=10&sortBy=taskId&sortDirection=ASC`,
+      `${baseUrl}/tasks/workspace/${workspaceId}?pageNo=0&pageSize=100&sortBy=taskId&sortDirection=ASC`,
       {
         method: "GET",
         headers: headers,

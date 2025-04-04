@@ -5,7 +5,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { object } from "zod";
 
 const tagValue = [
   { key: "DESIGN", value: "Design" },
@@ -19,9 +18,16 @@ const tagValue = [
   { key: "FEATURE", value: "Feature" },
 ];
 
-const SelectTagComponent = ({ onSelect}) => {
+const SelectTagComponent = ({ action, task, setValue, trigger }) => {
   return (
-    <Select onValueChange={(value=>{onSelect(value)})}>
+    <Select
+      onValueChange={(value) => {
+        setValue("tag", value);
+        trigger("tag");
+      }}
+      defaultValue={action === "UPDATE" ? (task ? task.tag : "") : ""}
+      className="mb-2"
+    >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Task Tag" />
       </SelectTrigger>

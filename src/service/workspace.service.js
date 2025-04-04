@@ -72,7 +72,7 @@ export const getAllWorkspacesService = async () => {
   const headers = await headerToken();
   try {
     const res = await fetch(
-      `${baseUrl}/workspaces?pageNo=0&pageSize=10&sortBy=workspaceId&sortDirection=ASC`,
+      `${baseUrl}/workspaces?pageNo=0&pageSize=100&sortBy=workspaceId&sortDirection=ASC`,
       {
         method: "GET",
         headers: headers,

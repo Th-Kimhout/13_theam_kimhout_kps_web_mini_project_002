@@ -2,6 +2,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -11,10 +12,10 @@ import TaskFormComponent from "./taskForm";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-const TaskActionButtonComponent = ({ action, workspaceId, taskId }) => {
+const TaskActionButtonComponent = ({ action, workspaceId, task }) => {
   const [isOpen, setIsOpen] = useState(!!action);
 
-  // Sync isOpen with action changes
+
   useEffect(() => {
     setIsOpen(!!action);
   }, [action]);
@@ -46,10 +47,12 @@ const TaskActionButtonComponent = ({ action, workspaceId, taskId }) => {
           <DialogTitle className="text-center">
             {action === "UPDATE" ? "Update Task" : "Add Task"}
           </DialogTitle>
+          <DialogDescription></DialogDescription>
           <TaskFormComponent
             action={action}
             workspaceId={workspaceId}
-            taskId={taskId}
+           task={task}
+            onClose={() => setIsOpen(false)}
           />
         </DialogHeader>
       </DialogContent>

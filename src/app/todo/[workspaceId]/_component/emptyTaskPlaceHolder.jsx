@@ -12,6 +12,7 @@ const EmptyTaskPlaceHolderComponent = () => {
       <div className=" relative h-[300px] w-[300px]">
         <Image
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={"/chin_chang_sad.jpg"}
           className="object-cover"
           alt="shin chang sad"
